@@ -20,6 +20,15 @@ paths:
       description: 全item取得
       produces:
         - application/json
+      parameters:
+        - name: limit
+          type: integer
+          in: query
+          description: 取得数上限値(default:0（上限無し）)
+        - name: start
+          type: integer
+          in: query
+          description: 取得開始オフセット値(default:0)
       responses:
         '200':
           description: 成功

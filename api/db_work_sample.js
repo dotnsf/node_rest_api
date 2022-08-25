@@ -39,6 +39,72 @@ api.use( bodyParser.urlencoded( { extended: true } ) );
 api.use( bodyParser.json() );
 api.use( express.Router() );
 
+//. DB情報
+api.readDb = function(){
+  return new Promise( ( resolve, reject ) => {
+    if( db ){
+      var option = {
+        url: database_url,
+        method: 'GET',
+        headers: db_headers
+      };
+      request( option, ( err, res, body ) => {
+        if( err ){
+          resolve( { status: false, error: err } );
+        }else{
+          resolve( { status: true, result: body } );
+        }
+      });
+    }else{
+      resolve( { status: false, error: 'no db' } );
+    }
+  });
+}
+
+//. DB新規作成
+api.createDb = function(){
+  return new Promise( ( resolve, reject ) => {
+    if( db ){
+      var option = {
+        url: database_url,
+        method: 'PUT',
+        headers: db_headers
+      };
+      request( option, ( err, res, body ) => {
+        if( err ){
+          resolve( { status: false, error: err } );
+        }else{
+          resolve( { status: true, result: body } );
+        }
+      });
+    }else{
+      resolve( { status: false, error: 'no db' } );
+    }
+  });
+}
+
+//. DB削除
+api.deleteDb = function(){
+  return new Promise( ( resolve, reject ) => {
+    if( db ){
+      var option = {
+        url: database_url,
+        method: 'DELETE',
+        headers: db_headers
+      };
+      request( option, ( err, res, body ) => {
+        if( err ){
+          resolve( { status: false, error: err } );
+        }else{
+          resolve( { status: true, result: body } );
+        }
+      });
+    }else{
+      resolve( { status: false, error: 'no db' } );
+    }
+  });
+}
+
 
 //. 新規作成用関数
 api.createItem = function( item, id ){
@@ -440,6 +506,11 @@ api.delete( '/items', function( req, res ){
   });
 });
 
+//. #1 初期化
+api.readDb().then( function( result ){
+}, async function( err ){
+  await api.createDb(); 
+});
 
 //. api をエクスポート
 module.exports = api;

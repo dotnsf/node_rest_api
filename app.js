@@ -3,8 +3,8 @@ var express = require( 'express' ),
     session = require( 'express-session' ),
     app = express();
 
-var dbtype = 'couchdb'; 
-var db = require( './api/db_' + dbtype );
+//var db = require( './api/db' );
+var db = require( './api/db_work_sample' );
 app.use( '/api/db', db );
 
 app.use( express.Router() );

@@ -39,13 +39,77 @@ api.use( bodyParser.urlencoded( { extended: true } ) );
 api.use( bodyParser.json() );
 api.use( express.Router() );
 
+//. DB情報
+api.readDb = function(){
+  return new Promise( ( resolve, reject ) => {
+    if( db ){
+      var option = {
+        url: database_url,
+        method: 'GET',
+        headers: db_headers
+      };
+      request( option, ( err, res, body ) => {
+        if( err ){
+          resolve( { status: false, error: err } );
+        }else{
+          resolve( { status: true, result: body } );
+        }
+      });
+    }else{
+      resolve( { status: false, error: 'no db' } );
+    }
+  });
+}
+
+//. DB新規作成
+api.createDb = function(){
+  return new Promise( ( resolve, reject ) => {
+    if( db ){
+      var option = {
+        url: database_url,
+        method: 'PUT',
+        headers: db_headers
+      };
+      request( option, ( err, res, body ) => {
+        if( err ){
+          resolve( { status: false, error: err } );
+        }else{
+          resolve( { status: true, result: body } );
+        }
+      });
+    }else{
+      resolve( { status: false, error: 'no db' } );
+    }
+  });
+}
+
+//. DB削除
+api.deleteDb = function(){
+  return new Promise( ( resolve, reject ) => {
+    if( db ){
+      var option = {
+        url: database_url,
+        method: 'DELETE',
+        headers: db_headers
+      };
+      request( option, ( err, res, body ) => {
+        if( err ){
+          resolve( { status: false, error: err } );
+        }else{
+          resolve( { status: true, result: body } );
+        }
+      });
+    }else{
+      resolve( { status: false, error: 'no db' } );
+    }
+  });
+}
+
 
 //. 新規作成用関数
 api.createItem = function( item, id ){
   return new Promise( ( resolve, reject ) => {
     if( db ){
-      resolve( { status: false, result: 'not implemented yet.' } );
-      /*
       var t = ( new Date() ).getTime();
       item.created = t;
       item.updated = t;
@@ -63,7 +127,6 @@ api.createItem = function( item, id ){
           resolve( { status: true, result: body } );
         }
       });
-      */
     }else{
       resolve( { status: false, error: 'no db' } );
     }
@@ -73,8 +136,6 @@ api.createItem = function( item, id ){
 api.createItems = function( items ){
   return new Promise( ( resolve, reject ) => {
     if( db ){
-      resolve( { status: false, result: 'not implemented yet.' } );
-      /*
       var t = ( new Date() ).getTime();
       for( var i = 0; i < items.length; i ++ ){
         items[i].created = t;
@@ -94,7 +155,6 @@ api.createItems = function( items ){
           resolve( { status: true, result: body } );
         }
       });
-      */
     }else{
       resolve( { status: false, error: 'no db' } );
     }
@@ -105,8 +165,6 @@ api.createItems = function( items ){
 api.readItem = function( id ){
   return new Promise( ( resolve, reject ) => {
     if( db ){
-      resolve( { status: false, result: 'not implemented yet.' } );
-      /*
       if( id ){
         var option = {
           url: database_url + '/' + id,
@@ -124,7 +182,6 @@ api.readItem = function( id ){
       }else{
         resolve( { status: false, error: 'no id' } );
       }
-      */
     }else{
       resolve( { status: false, error: 'no db' } );
     }
@@ -135,8 +192,6 @@ api.readItem = function( id ){
 api.readItems = function( limit, start ){
   return new Promise( ( resolve, reject ) => {
     if( db ){
-      resolve( { status: false, result: 'not implemented yet.' } );
-      /*
       var url = database_url + '/_all_docs?include_docs=true';
       if( limit ){
         url += '&limit=' + limit;
@@ -163,7 +218,6 @@ api.readItems = function( limit, start ){
           resolve( { status: true, results: docs } );
         }
       });
-      */
     }else{
       resolve( { status: false, error: 'no db' } );
     }
@@ -173,8 +227,6 @@ api.readItems = function( limit, start ){
 api.queryItems = function( key, limit, start ){
   return new Promise( ( resolve, reject ) => {
     if( db ){
-      resolve( { status: false, result: 'not implemented yet.' } );
-      /*
       var url = database_url + '/_find';
       var option = {
         url: url,
@@ -204,7 +256,6 @@ api.queryItems = function( key, limit, start ){
           resolve( { status: true, results: docs } );
         }
       });
-      */
     }else{
       resolve( { status: false, error: 'no db' } );
     }
@@ -215,8 +266,6 @@ api.queryItems = function( key, limit, start ){
 api.updateItem = function( item ){
   return new Promise( ( resolve, reject ) => {
     if( db ){
-      resolve( { status: false, result: 'not implemented yet.' } );
-      /*
       if( !item._id ){
         resolve( { status: false, error: 'id needed.' } );
       }else{
@@ -247,7 +296,6 @@ api.updateItem = function( item ){
           }
         });
       }
-      */
     }else{
       resolve( { status: false, error: 'no db' } );
     }
@@ -258,8 +306,6 @@ api.updateItem = function( item ){
 api.deleteItem = function( id ){
   return new Promise( ( resolve, reject ) => {
     if( db ){
-      resolve( { status: false, result: 'not implemented yet.' } );
-      /*
       if( !id ){
         resolve( { status: false, error: 'id needed.' } );
       }else{
@@ -289,7 +335,6 @@ api.deleteItem = function( id ){
           }
         });
       }
-      */
     }else{
       resolve( { status: false, error: 'no db' } );
     }
@@ -299,8 +344,6 @@ api.deleteItem = function( id ){
 api.deleteItems = function(){
   return new Promise( ( resolve, reject ) => {
     if( db ){
-      resolve( { status: false, result: 'not implemented yet.' } );
-      /*
       var url = database_url + '/_all_docs?include_docs=true';
       var option = {
         url: url,
@@ -340,7 +383,6 @@ api.deleteItems = function(){
           }
         }
       });
-      */
     }else{
       resolve( { status: false, error: 'no db' } );
     }
@@ -386,17 +428,26 @@ api.post( '/items', async function( req, res ){
 api.get( '/item/:id', async function( req, res ){
   res.contentType( 'application/json; charset=utf-8' );
 
+  res.status( 400 );
+  res.write( JSON.stringify( { status: false, message: 'not implemented yet.' }, null, 2 ) );
+  res.end();
+  /*
   var item_id = req.params.id;
   api.readItem( item_id ).then( function( result ){
     res.status( result.status ? 200 : 400 );
     res.write( JSON.stringify( result, null, 2 ) );
     res.end();
   });
+  */
 });
 
 api.get( '/items', async function( req, res ){
   res.contentType( 'application/json; charset=utf-8' );
 
+  res.status( 400 );
+  res.write( JSON.stringify( { status: false, message: 'not implemented yet.' }, null, 2 ) );
+  res.end();
+  /*
   var limit = 0;
   var start = 0;
   if( req.query.limit ){
@@ -416,6 +467,7 @@ api.get( '/items', async function( req, res ){
     res.write( JSON.stringify( result, null, 2 ) );
     res.end();
   });
+  */
 });
 
 api.get( '/items/:key', async function( req, res ){
@@ -464,6 +516,11 @@ api.delete( '/items', function( req, res ){
   });
 });
 
+//. #1 初期化
+api.readDb().then( function( result ){
+}, async function( err ){
+  await api.createDb(); 
+});
 
 //. api をエクスポート
 module.exports = api;
