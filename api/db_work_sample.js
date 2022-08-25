@@ -52,6 +52,7 @@ api.readDb = function(){
         if( err ){
           resolve( { status: false, error: err } );
         }else{
+          if( typeof body == 'string' ){ body = JSON.parse( body ); }
           resolve( { status: true, result: body } );
         }
       });
@@ -74,6 +75,7 @@ api.createDb = function(){
         if( err ){
           resolve( { status: false, error: err } );
         }else{
+          if( typeof body == 'string' ){ body = JSON.parse( body ); }
           resolve( { status: true, result: body } );
         }
       });
@@ -507,7 +509,10 @@ api.delete( '/items', function( req, res ){
 });
 
 //. #1 初期化
-api.readDb().then( function( result ){
+api.readDb().then( async function( result ){
+  if( result && result.result && result.result.error && result.result.error == 'not_found' ){  //. result.result.error = 'not_found'
+    await api.createDb(); 
+  }
 }, async function( err ){
   await api.createDb(); 
 });

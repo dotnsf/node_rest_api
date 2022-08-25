@@ -1,4 +1,4 @@
-//. db.js
+//. db_work_sample.js
 var express = require( 'express' ),
     bodyParser = require( 'body-parser' ),
     request = require( 'request' ),
@@ -52,6 +52,7 @@ api.readDb = function(){
         if( err ){
           resolve( { status: false, error: err } );
         }else{
+          if( typeof body == 'string' ){ body = JSON.parse( body ); }
           resolve( { status: true, result: body } );
         }
       });
@@ -74,6 +75,7 @@ api.createDb = function(){
         if( err ){
           resolve( { status: false, error: err } );
         }else{
+          if( typeof body == 'string' ){ body = JSON.parse( body ); }
           resolve( { status: true, result: body } );
         }
       });
@@ -393,6 +395,10 @@ api.deleteItems = function(){
 api.post( '/item', async function( req, res ){
   res.contentType( 'application/json; charset=utf-8' );
 
+  res.status( 400 );
+  res.write( JSON.stringify( { status: false, error: 'not implemented yet.' }, null, 2 ) );
+  res.end();
+  /*
   var item = req.body;
   item.price = parseInt( item.price );
   if( !item.id ){
@@ -405,11 +411,16 @@ api.post( '/item', async function( req, res ){
     res.write( JSON.stringify( result, null, 2 ) );
     res.end();
   });
+  */
 });
 
 api.post( '/items', async function( req, res ){
   res.contentType( 'application/json; charset=utf-8' );
 
+  res.status( 400 );
+  res.write( JSON.stringify( { status: false, error: 'not implemented yet.' }, null, 2 ) );
+  res.end();
+  /*
   var items = req.body;
   items.forEach( function( item ){
     item.price = parseInt( item.price );
@@ -423,13 +434,14 @@ api.post( '/items', async function( req, res ){
     res.write( JSON.stringify( result, null, 2 ) );
     res.end();
   });
+  */
 });
 
 api.get( '/item/:id', async function( req, res ){
   res.contentType( 'application/json; charset=utf-8' );
 
   res.status( 400 );
-  res.write( JSON.stringify( { status: false, message: 'not implemented yet.' }, null, 2 ) );
+  res.write( JSON.stringify( { status: false, error: 'not implemented yet.' }, null, 2 ) );
   res.end();
   /*
   var item_id = req.params.id;
@@ -445,7 +457,7 @@ api.get( '/items', async function( req, res ){
   res.contentType( 'application/json; charset=utf-8' );
 
   res.status( 400 );
-  res.write( JSON.stringify( { status: false, message: 'not implemented yet.' }, null, 2 ) );
+  res.write( JSON.stringify( { status: false, error: 'not implemented yet.' }, null, 2 ) );
   res.end();
   /*
   var limit = 0;
@@ -473,17 +485,26 @@ api.get( '/items', async function( req, res ){
 api.get( '/items/:key', async function( req, res ){
   res.contentType( 'application/json; charset=utf-8' );
 
+  res.status( 400 );
+  res.write( JSON.stringify( { status: false, error: 'not implemented yet.' }, null, 2 ) );
+  res.end();
+  /*
   var key = req.params.key;
   api.queryItems( key ).then( function( result ){
     res.status( result.status ? 200 : 400 );
     res.write( JSON.stringify( result, null, 2 ) );
     res.end();
   });
+  */
 });
 
 api.put( '/item/:id', function( req, res ){
   res.contentType( 'application/json; charset=utf-8' );
 
+  res.status( 400 );
+  res.write( JSON.stringify( { status: false, error: 'not implemented yet.' }, null, 2 ) );
+  res.end();
+  /*
   var item_id = req.params.id;
   var item = req.body;
   //item.id = item_id;
@@ -493,31 +514,45 @@ api.put( '/item/:id', function( req, res ){
     res.write( JSON.stringify( result, null, 2 ) );
     res.end();
   });
+  */
 });
 
 api.delete( '/item/:id', function( req, res ){
   res.contentType( 'application/json; charset=utf-8' );
 
+  res.status( 400 );
+  res.write( JSON.stringify( { status: false, error: 'not implemented yet.' }, null, 2 ) );
+  res.end();
+  /*
   var item_id = req.params.id;
   api.deleteItem( item_id ).then( function( result ){
     res.status( result.status ? 200 : 400 );
     res.write( JSON.stringify( result, null, 2 ) );
     res.end();
   });
+  */
 });
 
 api.delete( '/items', function( req, res ){
   res.contentType( 'application/json; charset=utf-8' );
 
+  res.status( 400 );
+  res.write( JSON.stringify( { status: false, error: 'not implemented yet.' }, null, 2 ) );
+  res.end();
+  /*
   api.deleteItems().then( function( result ){
     res.status( result.status ? 200 : 400 );
     res.write( JSON.stringify( result, null, 2 ) );
     res.end();
   });
+  */
 });
 
 //. #1 初期化
-api.readDb().then( function( result ){
+api.readDb().then( async function( result ){
+  if( result && result.result && result.result.error && result.result.error == 'not_found' ){  //. result.result.error = 'not_found'
+    await api.createDb(); 
+  }
 }, async function( err ){
   await api.createDb(); 
 });
