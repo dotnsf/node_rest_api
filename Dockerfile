@@ -10,7 +10,8 @@ COPY package*.json ./
 
 # https://www.fixes.pub/program/323374.html
 # https://stackoverflow.com/questions/69860233/cant-install-python-package-on-alpine-docker-anymore
-RUN apk update && apk upgrade && apk add python3 alpine-sdk
+# RUN apk update && apk upgrade && apk add python3 alpine-sdk
+RUN apk update && apk upgrade
 
 RUN npm install
 
