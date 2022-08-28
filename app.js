@@ -3,8 +3,7 @@ var express = require( 'express' ),
     session = require( 'express-session' ),
     app = express();
 
-//var db = require( './api/db' );
-var db = require( './api/db_work_sample' );
+var db = require( './api/db' );
 app.use( '/api/db', db );
 
 app.use( express.Router() );

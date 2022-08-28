@@ -12,6 +12,13 @@ Sample REST API application with Node.js
   - `DATABASE_URL` : URL connection string for CouchDB/Cloudant
 
 
+## Settings for API Server
+
+  - `/public/settings.json`
+
+    - Edit this file as API Server's URL, if you separate FrontEnd and API Server.
+
+
 ## Running data services on docker
 
 - CouchDB

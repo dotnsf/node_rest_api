@@ -1,9 +1,32 @@
 //. main.js
+var API_SERVER = '';
+
 $(function(){
+  $.ajax({
+    type: 'GET',
+    url: '/settings.json',
+    success: function( json ){
+      //console.log( json );
+      if( json && json.API_SERVER ){
+        API_SERVER = json.API_SERVER;
+        while( API_SERVER.endsWith( '/' ) ){
+          API_SERVER = API_SERVER.substr( 0, API_SERVER.length - 1 );
+        }
+      }
+      init();
+    },
+    error: function( err ){
+      console.log( err );
+      init();
+    }
+  });
+});
+
+function init(){
   $('#items_table_tbody').html( '' );
   $.ajax({
     type: 'GET',
-    url: '/api/db/items',
+    url: API_SERVER + '/api/db/items',
     success: function( result ){
       if( result && result.status && result.results ){
         for( var i = 0; i < result.results.length; i ++ ){
@@ -38,9 +61,9 @@ $(function(){
     },
     error: function( err ){
       console.log( err );
-    },
+    }
   });
-});
+}
 
 function saveItem(){
   var edit_id = $('#edit_id').val();
@@ -51,7 +74,7 @@ function saveItem(){
     //. 更新
     $.ajax({
       type: 'PUT',
-      url: '/api/db/item/' + edit_id,
+      url: API_SERVER + '/api/db/item/' + edit_id,
       data: { name: edit_name, price: parseInt( edit_price ) },
       success: function( result ){
         location.href = '/';
@@ -64,7 +87,7 @@ function saveItem(){
     //. 作成
     $.ajax({
       type: 'POST',
-      url: '/api/db/item',
+      url: API_SERVER + '/api/db/item',
       data: { name: edit_name, price: parseInt( edit_price ) },
       success: function( result ){
         location.href = '/';
@@ -96,7 +119,7 @@ function deleteItem( item_id, item_name ){
   if( confirm( item_name + ' を削除します。よろしいですか？' ) ){
     $.ajax({
       type: 'DELETE',
-      url: '/api/db/item/' + item_id,
+      url: API_SERVER + '/api/db/item/' + item_id,
       success: function( result ){
         location.href = '/';
       },
